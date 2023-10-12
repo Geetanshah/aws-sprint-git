@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_container20
+    environment:
+      MYSQL_DATABASE: database_geeta  
+      MYSQL_USER: root 
+      MYSQL_PASSWORD: 12345678
+    ports:
+      - "3306:3306"
+    networks:
+      - ola_network
+
+
+  springboot:
+    build: .
+    container_name: sakila_film_rental
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+    networks:
+      - ola_network
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db-instance-geeta.cxbxe7ypeoyt.us-east-1.rds.amazonaws.com:3306/database_geeta
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 12345678
+
+networks:
+  ola_network:
+    driver: bridge
